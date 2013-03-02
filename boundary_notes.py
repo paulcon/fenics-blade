@@ -34,3 +34,9 @@ class RightBoundary(SubDomain):
 
 Gamma_1 = RightBoundary()
 Gamma_1.mark(boundary_parts, 3)
+
+u_L = Expression("1 + 2*x[1]*x[1]")
+u_R = Expression("2 + 2*x[1]*x[1]")
+bcs = [DirichletBC(V, u_L, boundary_parts, 2),
+       DirichletBC(V, u_R, boundary_parts, 3)]
+
