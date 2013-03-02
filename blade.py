@@ -31,17 +31,25 @@ if __name__=="__main__":
     
     bc_cool = CoolBoundary()
     bcs = DirichletBC(V,Constant(0.0),bc_cool)
-    
-    
+
     u = TrialFunction(V)
     v = TestFunction(V)
     f = Constant(1.0)
     g = Expression("1-x[0]")
-    a = inner(grad(u), grad(v))*dx
-    L = f*v*dx + g*v*ds
+    kappa = Constant(1.0) + Constant(0.01)*u
+    F = -inner(kappa*grad(u), grad(v))*dx + f*v*dx + g*v*ds
+    u_ = Function(V)
+    F = action(F,u_)
+    J = derivative(F,u_,u)
 
-    # Compute solution
-    u = Function(V)
-    solve(a == L, u, bcs)
+    problem = NonlinearVariationalProblem(F, u_, bcs, J)
+    solver = NonlinearVariationalSolver(problem)
+    prm = solver.parameters
+    prm["newton_solver"]["absolute_tolerance"] = 1E-8
+    prm["newton_solver"]["relative_tolerance"] = 1E-7
+    prm["newton_solver"]["maximum_iterations"] = 25
 
-    plot(u,interactive=True)
+    set_log_level(PROGRESS)
+    solver.solve()
+
+    plot(u_,interactive=True)
