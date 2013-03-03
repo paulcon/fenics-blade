@@ -26,7 +26,11 @@ class RandomHeatFlux(Expression):
                                                 len(self.bmeshz)))
 
     def eval(self,values,x):
-        values[0] = self.f(x[0],x[2])
+        tol = 1E-14 # tolerance for coordinate comparisons
+        if abs(x[2])<tol or abs(x[2]-2)<tol:
+            values[0] = 0.0
+        else:
+            values[0] = self.f(x[0],x[2])
 
 if __name__=="__main__":
 
