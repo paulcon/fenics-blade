@@ -8,8 +8,7 @@ x = linspace(0,1,31);
 z = linspace(0,2,101);
 [X,Z] = meshgrid(x,z);
 mesh = [X(:) Z(:)];
-dlmwrite('xcoord.txt',x,'delimiter',',','precision','%18.16e');
-dlmwrite('zcoord.txt',z,'delimiter',',','precision','%18.16e');
+dlmwrite('bmesh.txt',mesh,'delimiter',',','precision','%18.16e');
 
 %%
 % Correlation definition
