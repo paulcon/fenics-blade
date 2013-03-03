@@ -1,3 +1,6 @@
+"""
+A 2d version of the heat flux solver I used to get things set up.
+"""
 from dolfin import *
 import numpy as np
 #from scipy.interpolate import interp1d
@@ -30,8 +33,8 @@ class BottomFluxBoundary(SubDomain):
 class RandomHeatFlux(Expression):
     def __init__(self):
         # load 2d bases and mesh they live on
-        self.bases = np.loadtxt(open("klbases_1d.txt","rb"),delimiter=",")
-        self.bases_mesh = np.loadtxt(open("xcoord.txt","rb"),delimiter=",")
+        self.bases = np.loadtxt(open("kl/klbases_1d.txt","rb"),delimiter=",")
+        self.bases_mesh = np.loadtxt(open("kl/xcoord.txt","rb"),delimiter=",")
 
     def construct(self,coeff):
         # linear combination of bases and parameters
@@ -45,7 +48,7 @@ class RandomHeatFlux(Expression):
 if __name__=="__main__":
     #pdb.set_trace()
     
-    mesh = Mesh("naca0018_2d.xml")
+    mesh = Mesh("mesh/naca0018_2d.xml")
     V = FunctionSpace(mesh,"CG",4)
 
     # Dirichlet boundary

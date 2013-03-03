@@ -1,3 +1,7 @@
+"""
+Solve the heat transfer on the blade with a random heat flux. More notes coming soon.
+"""
+
 from dolfin import *
 import numpy as np
 from scipy.interpolate import RectBivariateSpline
@@ -14,9 +18,9 @@ class CoolBoundary(SubDomain):
 class RandomHeatFlux(Expression):
     def __init__(self):
         # load 2d bases and mesh they live on
-        self.bases = np.loadtxt(open("klbases_2d.txt","rb"),delimiter=",")
-        self.bmeshx = np.loadtxt(open("xcoord.txt","rb"),delimiter=",")
-        self.bmeshz = np.loadtxt(open("zcoord.txt","rb"),delimiter=",")
+        self.bases = np.loadtxt(open("kl/klbases_2d.txt","rb"),delimiter=",")
+        self.bmeshx = np.loadtxt(open("kl/xcoord.txt","rb"),delimiter=",")
+        self.bmeshz = np.loadtxt(open("kl/zcoord.txt","rb"),delimiter=",")
 
     def construct(self,coeff):
         # linear combination of bases and parameters
@@ -35,7 +39,7 @@ class RandomHeatFlux(Expression):
 if __name__=="__main__":
 
     # Load the mesh and define the function space
-    mesh = Mesh("naca0018_3d.xml")
+    mesh = Mesh("mesh/naca0018_3d.xml")
     V = FunctionSpace(mesh,"CG",1)
 
     # Dirichlet boundary
@@ -48,7 +52,7 @@ if __name__=="__main__":
     f.construct(a)
 
     # Write heat flux
-    fluxfile = File("flux3d.pvd")
+    fluxfile = File("output/flux3d.pvd")
     fluxfile << project(f,V)
     
     # Set up
@@ -76,7 +80,7 @@ if __name__=="__main__":
     q = inner(g,u_)*dx
     print "QoI: %6.4e" % assemble(q)
 
-    solnfile = File("blade3d.pvd")
+    solnfile = File("output/blade3d.pvd")
     solnfile << u_
     
     #plot(u_,interactive=True)
