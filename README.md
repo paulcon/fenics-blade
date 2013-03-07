@@ -11,4 +11,4 @@ python blade_3d.py
 
 or for parallel:
 
-mpirun python blade_3d.py -n4
+mpirun -n 4 python blade_3d.py 
